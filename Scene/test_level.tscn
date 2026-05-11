@@ -10,9 +10,6 @@
 [node name="CharacterBody2D" parent="." unique_id=1564086465 instance=ExtResource("1_kicsh")]
 position = Vector2(371, 753)
 
-[node name="StaticBody2D" parent="." unique_id=163676084 instance=ExtResource("2_si1yy")]
-position = Vector2(360, 900)
-
 [node name="Camera2D" type="Camera2D" parent="." unique_id=185686049 node_paths=PackedStringArray("player")]
 position = Vector2(360, 640)
 script = ExtResource("3_si1yy")

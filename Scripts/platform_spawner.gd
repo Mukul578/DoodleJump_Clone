@@ -33,6 +33,7 @@ func _ready() -> void:
 	highest_platform_y = player.global_position.y + 200.0
 	_spawn_initial_platforms()
 
+
 func _process(delta: float) -> void:
 	if camera == null:
 		return
@@ -79,6 +80,8 @@ func _cleanup_old_platforms() -> void:
 			spawned_platforms.remove_at(i)
 			continue
 		
-		if platform.global_position.y > cleanup_y:
+		var is_below_camera := platform.global_position.y > cleanup_y
+		
+		if is_below_camera:
 			platform.queue_free()
 			spawned_platforms.remove_at(i)

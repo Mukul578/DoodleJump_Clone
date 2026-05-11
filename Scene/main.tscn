@@ -1,25 +1,74 @@
 [gd_scene format=3 uid="uid://tgnk4xv41pxa"]
 
+[ext_resource type="Script" uid="uid://12det2chnbft" path="res://Scripts/game.gd" id="1_3amdw"]
 [ext_resource type="PackedScene" uid="uid://bbwx8tpby6c8f" path="res://Scene/player.tscn" id="1_sblpm"]
 [ext_resource type="PackedScene" uid="uid://be3inefwrlxp7" path="res://Scene/platform.tscn" id="2_r34rm"]
 [ext_resource type="Script" uid="uid://e4sq7gj4340i" path="res://Scripts/camer_follow.gd" id="3_r34rm"]
 [ext_resource type="Script" uid="uid://c28s1f0lda65w" path="res://Scripts/platform_spawner.gd" id="4_2wwxx"]
+[ext_resource type="PackedScene" uid="uid://c7jnaelwwwy7b" path="res://Scene/UI/game_over_panel.tscn" id="6_1xcnr"]
 
-[node name="Main" type="Node2D" unique_id=1864654331]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1xcnr"]
+size = Vector2(360, 1280)
 
-[node name="CharacterBody2D" parent="." unique_id=1564086465 instance=ExtResource("1_sblpm")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ow1sv"]
+size = Vector2(360, 1280)
+
+[node name="Main" type="Node2D" unique_id=1864654331 node_paths=PackedStringArray("player", "camera", "score_label", "game_over_panel")]
+script = ExtResource("1_3amdw")
+player = NodePath("Player")
+camera = NodePath("Camera2D")
+score_label = NodePath("HUD/ScoreLabel")
+game_over_panel = NodePath("HUD/GameOverPanel")
+
+[node name="Player" parent="." unique_id=1564086465 instance=ExtResource("1_sblpm")]
 position = Vector2(338, 695)
 
 [node name="StaticBody2D" parent="." unique_id=163676084 instance=ExtResource("2_r34rm")]
-position = Vector2(365, 814)
+position = Vector2(356, 977)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=786848452 node_paths=PackedStringArray("player")]
 position = Vector2(360, 640)
 script = ExtResource("3_r34rm")
-player = NodePath("../CharacterBody2D")
+player = NodePath("../Player")
 
 [node name="PlatformSpawner" type="Node2D" parent="." unique_id=534283068 node_paths=PackedStringArray("player", "camera")]
 script = ExtResource("4_2wwxx")
 platform_scene = ExtResource("2_r34rm")
-player = NodePath("../CharacterBody2D")
+player = NodePath("../Player")
 camera = NodePath("../Camera2D")
+cleanup_margin = 0.0
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1355471429]
+
+[node name="ScoreLabel" type="Label" parent="HUD" unique_id=105917180]
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 72.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 42
+text = "0"
+
+[node name="GameOverPanel" parent="HUD" unique_id=1170430187 instance=ExtResource("6_1xcnr")]
+visible = false
+
+[node name="TouchControls" type="Control" parent="HUD" unique_id=1968466411]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LeftTouchButton" type="TouchScreenButton" parent="HUD/TouchControls" unique_id=1959620417]
+position = Vector2(180, 640)
+shape = SubResource("RectangleShape2D_1xcnr")
+passby_press = true
+action = "move_left"
+
+[node name="RightTouchButton" type="TouchScreenButton" parent="HUD/TouchControls" unique_id=1886612923]
+position = Vector2(540, 640)
+shape = SubResource("RectangleShape2D_ow1sv")
+passby_press = true
+action = "move_right"
