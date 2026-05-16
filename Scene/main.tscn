@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://e4sq7gj4340i" path="res://Scripts/camer_follow.gd" id="3_r34rm"]
 [ext_resource type="Script" uid="uid://c28s1f0lda65w" path="res://Scripts/platform_spawner.gd" id="4_2wwxx"]
 [ext_resource type="PackedScene" uid="uid://c7jnaelwwwy7b" path="res://Scene/UI/game_over_panel.tscn" id="6_1xcnr"]
+[ext_resource type="PackedScene" uid="uid://cq4iomftyu41i" path="res://Scene/platform_moving.tscn" id="7_ow1sv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1xcnr"]
 size = Vector2(360, 1280)
@@ -23,7 +24,7 @@ game_over_panel = NodePath("HUD/GameOverPanel")
 [node name="Player" parent="." unique_id=1564086465 instance=ExtResource("1_sblpm")]
 position = Vector2(338, 695)
 
-[node name="StaticBody2D" parent="." unique_id=163676084 instance=ExtResource("2_r34rm")]
+[node name="PlatformInitial" parent="." unique_id=163676084 instance=ExtResource("2_r34rm")]
 position = Vector2(356, 977)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=786848452 node_paths=PackedStringArray("player")]
@@ -34,6 +35,8 @@ player = NodePath("../Player")
 [node name="PlatformSpawner" type="Node2D" parent="." unique_id=534283068 node_paths=PackedStringArray("player", "camera")]
 script = ExtResource("4_2wwxx")
 platform_scene = ExtResource("2_r34rm")
+moving_platform_scene = ExtResource("7_ow1sv")
+moving_platform_chance = 1.0
 player = NodePath("../Player")
 camera = NodePath("../Camera2D")
 cleanup_margin = 0.0
@@ -72,3 +75,6 @@ position = Vector2(540, 640)
 shape = SubResource("RectangleShape2D_ow1sv")
 passby_press = true
 action = "move_right"
+
+[node name="PlatformMoving" parent="." unique_id=1674312547 instance=ExtResource("7_ow1sv")]
+position = Vector2(186, 844)

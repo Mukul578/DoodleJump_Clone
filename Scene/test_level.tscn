@@ -1,22 +1,77 @@
 [gd_scene format=3 uid="uid://6h5tgj1227i5"]
 
+[ext_resource type="Script" uid="uid://k0pn2b1146qq" path="res://Scripts/test_level.gd" id="1_k47a0"]
 [ext_resource type="PackedScene" uid="uid://bbwx8tpby6c8f" path="res://Scene/player.tscn" id="1_kicsh"]
 [ext_resource type="PackedScene" uid="uid://be3inefwrlxp7" path="res://Scene/platform.tscn" id="2_si1yy"]
+[ext_resource type="PackedScene" uid="uid://cq4iomftyu41i" path="res://Scene/platform_moving.tscn" id="3_6tsx8"]
 [ext_resource type="Script" uid="uid://e4sq7gj4340i" path="res://Scripts/camer_follow.gd" id="3_si1yy"]
 [ext_resource type="Script" uid="uid://c28s1f0lda65w" path="res://Scripts/platform_spawner.gd" id="4_6tsx8"]
+[ext_resource type="PackedScene" uid="uid://c7jnaelwwwy7b" path="res://Scene/UI/game_over_panel.tscn" id="6_7gbo7"]
 
-[node name="TestLevel" type="Node2D" unique_id=896951318]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k47a0"]
+size = Vector2(360, 1280)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ifsfr"]
+size = Vector2(360, 1280)
+
+[node name="TestLevel" type="Node2D" unique_id=896951318 node_paths=PackedStringArray("player", "camera", "score_label", "game_over_panel")]
+script = ExtResource("1_k47a0")
+player = NodePath("CharacterBody2D")
+camera = NodePath("Camera2D")
+score_label = NodePath("HUD/ScoreLabel")
+game_over_panel = NodePath("HUD/GameOverPanel")
 
 [node name="CharacterBody2D" parent="." unique_id=1564086465 instance=ExtResource("1_kicsh")]
-position = Vector2(371, 753)
+position = Vector2(352, 730)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=185686049 node_paths=PackedStringArray("player")]
 position = Vector2(360, 640)
 script = ExtResource("3_si1yy")
 player = NodePath("../CharacterBody2D")
 
-[node name="PlatformSpawner" type="Node2D" parent="." unique_id=940306247 node_paths=PackedStringArray("player", "camera")]
+[node name="StaticBody2D" parent="." unique_id=163676084 instance=ExtResource("2_si1yy")]
+position = Vector2(359, 980)
+
+[node name="PlatformSpawner" type="Node2D" parent="." unique_id=556731888 node_paths=PackedStringArray("player", "camera")]
 script = ExtResource("4_6tsx8")
 platform_scene = ExtResource("2_si1yy")
+moving_platform_scene = ExtResource("3_6tsx8")
+moving_platform_chance = 0.5
 player = NodePath("../CharacterBody2D")
 camera = NodePath("../Camera2D")
+cleanup_margin = 0.0
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1278476711]
+
+[node name="ScoreLabel" type="Label" parent="HUD" unique_id=1312865257]
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 72.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 42
+text = "0"
+
+[node name="GameOverPanel" parent="HUD" unique_id=1170430187 instance=ExtResource("6_7gbo7")]
+visible = false
+
+[node name="TouchControls" type="Control" parent="HUD" unique_id=1984104087]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LeftTouchButton" type="TouchScreenButton" parent="HUD/TouchControls" unique_id=166523381]
+position = Vector2(180, 640)
+shape = SubResource("RectangleShape2D_k47a0")
+passby_press = true
+action = "move_left"
+
+[node name="RightTouchButton" type="TouchScreenButton" parent="HUD/TouchControls" unique_id=1407044320]
+position = Vector2(540, 640)
+shape = SubResource("RectangleShape2D_ifsfr")
+passby_press = true
+action = "move_right"

@@ -1,6 +1,8 @@
 extends Node2D
 
 @export var platform_scene: PackedScene
+@export var moving_platform_scene: PackedScene
+@export_range(0.0, 1.0, 0.05) var moving_platform_chance: float = 0.2
 @export var player: Node2D
 @export var camera: Camera2D
 
@@ -62,11 +64,27 @@ func _spawn_next_platform() -> void:
 
 
 func _spawn_platform(spawn_position: Vector2) -> void:
-	var platform := platform_scene.instantiate() as Node2D
+	var scene_to_spawn := _get_platform_scene_to_spawn()
+	
+	if scene_to_spawn == null:
+		return
+	
+	var platform := scene_to_spawn.instantiate() as Node2D
 	get_parent().add_child(platform)
 	platform.global_position = spawn_position
-	spawned_platforms.append(platform)
 	
+	if platform.has_method("setup_start_position"):
+		platform.setup_start_position()
+	
+	spawned_platforms.append(platform)
+
+
+func _get_platform_scene_to_spawn() -> PackedScene:
+	if moving_platform_scene != null and randf() < moving_platform_chance:
+		return moving_platform_scene
+	
+	return platform_scene
+
 
 func _cleanup_old_platforms() -> void:
 	var viewport_height := get_viewport_rect().size.y
